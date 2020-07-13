@@ -1,8 +1,8 @@
-package com.sonymathew.course.apis.publisher.model;
+package com.sonymathew.course.apis.library.publisher;
 
 public class Publisher {
 	
-	private String publisherID;
+	private Integer publisherID;
 	private String name;
 	private String emailId;
 	private String phoneNumber;
@@ -11,7 +11,7 @@ public class Publisher {
 
 	}
 
-	public Publisher(String publisherID, String name, String emailId, String phoneNumber) {
+	public Publisher(Integer publisherID, String name, String emailId, String phoneNumber) {
 		super();
 		this.publisherID = publisherID;
 		this.name = name;
@@ -19,11 +19,11 @@ public class Publisher {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getPublisherID() {
+	public Integer getPublisherID() {
 		return publisherID;
 	}
 
-	public void setPublisherID(String publisherID) {
+	public void setPublisherID(Integer publisherID) {
 		this.publisherID = publisherID;
 	}
 
