@@ -1,5 +1,7 @@
 package com.sonymathew.course.apis.library.publisher;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -46,6 +48,7 @@ public class PublisherEntity {
 	public String getName() {
 		return name;
 	}
+	
 
 	public void setName(String name) {
 		this.name = name;
