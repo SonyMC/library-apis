@@ -8,12 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sonymathew.course.apis.library.exception.LibraryResourceAlreadyExistsException;
-import com.sonymathew.course.apis.library.exception.PublisherAlreadyExistsException;
 
 @RestController
 @RequestMapping(path="/v1/publishers")
@@ -33,21 +32,23 @@ public PublisherController(PublisherService publisherService) {
 //		return ("Welcome To World of Awesome Printing By Prentice!!!");
 //	}
 //	
-	
+	// Get publisher by id 
 	@GetMapping(path = "/{publisherId}")
 	public ResponseEntity<?> getPublisherbyId(@PathVariable Integer publisherId){
 		
-		// Note : The exception handlign has been moved out to the service class 
+		// Note : The exception handling has been moved out to the service class 
 		Publisher publisherbyId = publisherService.getPublisherbyId(publisherId);
 		return new ResponseEntity<>(publisherbyId,HttpStatus.FOUND);
 		
 
 	}
 	
+	
+	// Get publisher by name
 	@GetMapping(path = "/name/{publisherName}")
 	public ResponseEntity<?> getPublisherByName(@PathVariable String publisherName){
 		
-		// Note : The exception handlign has been moved out to the service class 
+		// Note : The exception handling has been moved out to the service class 
 		List<Publisher> publisherList = publisherService.getPublisherbyName(publisherName);
 		return new ResponseEntity<>(publisherList,HttpStatus.FOUND);
 		
@@ -55,12 +56,28 @@ public PublisherController(PublisherService publisherService) {
 	}
 		
 	
+	
+	// Create a new publisher 
 	@PostMapping
 	public ResponseEntity<?> addPublisher(@RequestBody Publisher publisher){
 
-		// Note : The exception handlign has been moved out to the service class 
+		// Note : The exception handling has been moved out to the service class 
 		publisherService.addPublisher(publisher);
 		return new ResponseEntity<>(publisher, HttpStatus.CREATED);
+	}
+	
+	
+	//Update a Publisher
+	@PutMapping(path = "/{publisherId}")
+	public ResponseEntity<?> UpdatePublisherbyId(@PathVariable Integer publisherId, @RequestBody Publisher publisherTobeUpdated){
+		
+		// We need to set the publisher id with what has been supplied in the path ,else whatever publisher is passed in parm will be updated.
+		publisherTobeUpdated.setPublisherID(publisherId);
+		// Note : The exception handling has been moved out to the service class 
+		publisherService.updatePublisherbyId(publisherTobeUpdated);
+		return new ResponseEntity<>(publisherTobeUpdated,HttpStatus.OK);
+		
+
 	}
 
 }
