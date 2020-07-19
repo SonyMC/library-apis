@@ -42,5 +42,23 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	
 		
 	}	
+	
+	@ExceptionHandler(PublisherNotUpdatedException.class)
+	public final ResponseEntity<Object> publisherNotUpdated(PublisherNotUpdatedException ex, WebRequest request) throws Exception {
+		
+		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(true));
+		return new ResponseEntity<Object>(exceptionResponse,HttpStatus.NOT_MODIFIED);
+	
+		
+	}
+	
+	@ExceptionHandler(PublisherNotDeletedException.class)
+	public final ResponseEntity<Object> publisherNotDeleted(PublisherNotDeletedException ex, WebRequest request) throws Exception {
+		
+		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(true));
+		return new ResponseEntity<Object>(exceptionResponse,HttpStatus.INTERNAL_SERVER_ERROR);
+	
+		
+	}		
 
 }
