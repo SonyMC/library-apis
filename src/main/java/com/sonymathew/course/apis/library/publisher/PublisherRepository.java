@@ -9,6 +9,10 @@ import org.springframework.stereotype.Repository;
 public interface PublisherRepository extends CrudRepository<PublisherEntity, Integer>{
 	
 	List<PublisherEntity> findByName(String Name); 
+	
+	List<PublisherEntity> findByNameContaining(String Name);
+	
+	
 
 
 }

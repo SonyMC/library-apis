@@ -1,9 +1,12 @@
 package com.sonymathew.course.apis.library.publisher;
 
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import com.sonymathew.course.apis.library.exception.PublisherAlreadyExistsException;
@@ -103,30 +106,77 @@ public class PublisherService {
 
 
 
-	// Get the publisher entity  by name
+	// Get the publisher entity  by name - method 1 where full name is passed in the request path 
 	public List<Publisher> getPublisherbyName(String publisherName) throws PublisherNotFoundException {
 		
+		return findPublisherByName(publisherName,"FullName");
+		
+	}
+
+
+	
+	// Get the publisher entity  by name - method 2 where partial name is passed as a query in uri 
+	public List<Publisher> searchPublisher(String publisherName) {
+		
+		return findPublisherByName(publisherName,"PartialName");
+	}
+	
+
+	
+	//utility method 
+	private List<Publisher> findPublisherByName(String publisherName, String searchMode) {
+		
+		// Check if name is supplied
+		if(!LibraryUtils.doesStringValueExist(publisherName)){
+			throw new PublisherNotFoundException("Publisher name not supplied !!!");
+		}
+		
+		List<PublisherEntity> publisherEntityList = new ArrayList<PublisherEntity>();
+		
 		//Entity list
-		List<PublisherEntity> publisherEntityList = publisherRepository.findByName(publisherName);
+		if(searchMode.matches("FullName")){
+			publisherEntityList = publisherRepository.findByName(publisherName);
+		}else{
+			publisherEntityList = publisherRepository.findByNameContaining(publisherName);
+		}
+			
 		
 		//Object list
-		List<Publisher> publisherList = new ArrayList<>();
+		//List<Publisher> publisherList = new ArrayList<>();
 			
 		
 		
 		if(publisherEntityList.isEmpty()){
 			throw new PublisherNotFoundException("Publisher name " + publisherName + " not Found!!Try with different name...");
 		}else{
+			
+			return createPublishersForSearchResponse(publisherEntityList);
+			/*
+			 * this is the long winded method compared to the short one we have above
+						
 			for(PublisherEntity pube:publisherEntityList){
 				publisherList.add(createPublisherFromEntity(pube));
 	    		}
 			
-		return publisherList;
+			return publisherList; 
+			
+			*/
 			
 		}
-		
 	}
 	
+	
+	
+	
+	// utility method
+	private List<Publisher> createPublishersForSearchResponse(List<PublisherEntity> publisherEntityList) {
+		
+		return publisherEntityList.stream()
+								  .map(pube -> createPublisherFromEntity(pube))
+								  .collect(Collectors.toList());
+	}
+
+
 	// Update the publisher entity  by id 
 	public void updatePublisherbyId(Publisher publisherTobeUpdated) throws PublisherNotFoundException {
 
@@ -223,6 +273,9 @@ public class PublisherService {
 			
 			
 	}
+
+	
+
 	
 }	
 
