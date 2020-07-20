@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.sonymathew.course.apis.library.utils.LibraryUtils;
 
 
 @RestController
@@ -56,7 +59,20 @@ public PublisherController(PublisherService publisherService) {
 
 	}
 		
-	
+	// Search publisher by name provided in uri query; Note that instead of @PathVariable in parm we use @RequestParam
+	@GetMapping(path = "/search")
+	public ResponseEntity<?> searchPublisherByName(@RequestParam String publisherName){
+		
+		//Check that name query is provided
+		if(!LibraryUtils.doesStringValueExist(publisherName)){
+			return new ResponseEntity<>("Please provide name to be searched as a query in the uri  ", HttpStatus.BAD_REQUEST);
+		}
+		// Note : The exception handling has been moved out to the service class 
+		List<Publisher> publisherList = publisherService.searchPublisher(publisherName);
+		return new ResponseEntity<>(publisherList,HttpStatus.FOUND);
+		
+
+	}	
 	
 	// Create a new publisher 
 	@PostMapping
