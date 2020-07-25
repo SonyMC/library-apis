@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import com.sonymathew.course.apis.library.exception.PublisherAlreadyExistsException;
@@ -54,7 +53,10 @@ public class PublisherService {
 	
 	
 	// Add a new publisher entity
-	public void addPublisher(Publisher publisherToBeAdded) throws PublisherAlreadyExistsException {
+	public void addPublisher(Publisher publisherToBeAdded, String traceId)  
+							 throws PublisherAlreadyExistsException {
+		
+
 		
 		// Create publisher entity from publisher object in request
 		PublisherEntity publisherEntity = createPublisherEntity(publisherToBeAdded);
@@ -64,7 +66,7 @@ public class PublisherService {
 		try{
 			addedPublisherEntity = publisherRepository.save(publisherEntity);
 			}catch(DataIntegrityViolationException divExc){
-			throw new PublisherAlreadyExistsException("Duplicate...Publisher already exists, try another name!!!");
+			throw new PublisherAlreadyExistsException("Trace ID :*** " + traceId + " ***Duplicate...Publisher already exists, try another name!!!");
 		}
 		
 		//Now finally set the id of the publisher object
@@ -75,7 +77,7 @@ public class PublisherService {
 	
 	
 	// Get the publisher entity by id 
-	public Publisher getPublisherbyId(int publisherId) throws PublisherNotFoundException {
+	public Publisher getPublisherbyId(int publisherId, String traceId) throws PublisherNotFoundException {
 		
 		
 		//This is the entity publisher used in the DB table. This is of type optional because we are using this to hold the results from the JPA API in PublisherRepository.class
@@ -86,7 +88,7 @@ public class PublisherService {
 		try{
 			retrievedPublisher = publisherRepository.findById(publisherId);
 		}catch(DataIntegrityViolationException divExc){
-			throw new PublisherNotFoundException("Publisher not Found!!Try with a different id...");
+			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher not Found!!Try with a different id...");
 			
 		}
 		
@@ -98,7 +100,7 @@ public class PublisherService {
 			return foundPublisher;
 		}else
 		{
-			throw new PublisherNotFoundException("Publisher ID " + publisherId + " not Found!!Try with a different id...");
+			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher ID " + publisherId + " not Found!!Try with a different id...");
 		}
 			
 	}
@@ -107,28 +109,28 @@ public class PublisherService {
 
 
 	// Get the publisher entity  by name - method 1 where full name is passed in the request path 
-	public List<Publisher> getPublisherbyName(String publisherName) throws PublisherNotFoundException {
+	public List<Publisher> getPublisherbyName(String publisherName, String traceId) throws PublisherNotFoundException {
 		
-		return findPublisherByName(publisherName,"FullName");
+		return findPublisherByName(publisherName,"FullName", traceId);
 		
 	}
 
 
 	
 	// Get the publisher entity  by name - method 2 where partial name is passed as a query in uri 
-	public List<Publisher> searchPublisher(String publisherName) {
+	public List<Publisher> searchPublisher(String publisherName, String traceId) {
 		
-		return findPublisherByName(publisherName,"PartialName");
+		return findPublisherByName(publisherName,"PartialName",traceId);
 	}
 	
 
 	
 	//utility method 
-	private List<Publisher> findPublisherByName(String publisherName, String searchMode) {
+	private List<Publisher> findPublisherByName(String publisherName, String searchMode, String traceId) {
 		
 		// Check if name is supplied
 		if(!LibraryUtils.doesStringValueExist(publisherName)){
-			throw new PublisherNotFoundException("Publisher name not supplied !!!");
+			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher name not supplied !!!");
 		}
 		
 		List<PublisherEntity> publisherEntityList = new ArrayList<PublisherEntity>();
@@ -147,7 +149,7 @@ public class PublisherService {
 		
 		
 		if(publisherEntityList.isEmpty()){
-			throw new PublisherNotFoundException("Publisher name " + publisherName + " not Found!!Try with different name...");
+			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher name " + publisherName + " not Found!!Try with different name...");
 		}else{
 			
 			return createPublishersForSearchResponse(publisherEntityList);
@@ -178,7 +180,7 @@ public class PublisherService {
 
 
 	// Update the publisher entity  by id 
-	public void updatePublisherbyId(Publisher publisherTobeUpdated) throws PublisherNotFoundException {
+	public void updatePublisherbyId(Publisher publisherTobeUpdated, String traceId) throws PublisherNotFoundException {
 
 		
 		//This is the entity publisher used in the DB table. This is of type optional because we are using this to hold the results from teh JPA API in PublisherRepository.class
@@ -190,14 +192,14 @@ public class PublisherService {
 		try{
 			retrievedPublisherEntity = publisherRepository.findById(publisherTobeUpdated.getPublisherID());
 		}catch(DataIntegrityViolationException divExc){
-			throw new PublisherNotFoundException("Publisher ID " + publisherTobeUpdated.getPublisherID() + " not Found!!Try with a different id...");
+			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher ID " + publisherTobeUpdated.getPublisherID() + " not Found!!Try with a different id...");
 			
 		}
 		
 		
 		// In case nothing is rertieved...Probably this check is redundant..
 		if(!retrievedPublisherEntity.isPresent()){
-			throw new PublisherNotFoundException("Publisher ID " + publisherTobeUpdated.getPublisherID() + " not Found!!Try with a different id...");
+			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher ID " + publisherTobeUpdated.getPublisherID() + " not Found!!Try with a different id...");
 		}	
 		
 		
@@ -229,7 +231,7 @@ public class PublisherService {
 			try{
 				publisherRepository.save(publisherEntityMapped);
 				}catch(DataIntegrityViolationException divExc){
-					throw new PublisherNotUpdatedException("Blimey...something went wrong...contact admin and say SOS!!!");
+					throw new PublisherNotUpdatedException("Trace ID :*** " + traceId + " *** Blimey...something went wrong...contact admin and say SOS!!!");
 				}
 		}	
 			
@@ -238,7 +240,7 @@ public class PublisherService {
 
 
 	// Delete the publisher entity  by id 
-	public void deletePublisherbyId(int publisherId) {
+	public void deletePublisherbyId(int publisherId, String traceId) {
 
 		
 		//This is the entity publisher used in the DB table. This is of type optional because we are using this to hold the results from teh JPA API in PublisherRepository.class
@@ -250,14 +252,14 @@ public class PublisherService {
 		try{
 			retrievedPublisherEntity = publisherRepository.findById(publisherId);
 		}catch(DataIntegrityViolationException divExc){
-			throw new PublisherNotFoundException("Publisher ID " + publisherId + " not Found!!Try with a different id...");
+			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher ID " + publisherId + " not Found!!Try with a different id...");
 			
 		}
 		
 		
 		// In case nothing is retrieved...Probably this check is redundant
 		if(!retrievedPublisherEntity.isPresent()){
-			throw new PublisherNotFoundException("Publisher ID " + publisherId + " not Found!!Try with a different id...");
+			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher ID " + publisherId + " not Found!!Try with a different id...");
 		}	
 		
 		//map to publisher entity object 
@@ -268,7 +270,7 @@ public class PublisherService {
 		try{
 			publisherRepository.delete(publisherEntityToBeDeleted);
 			}catch(DataIntegrityViolationException divExc){
-				throw new PublisherNotDeletedException("Will die another day...Get professional help!!!");
+				throw new PublisherNotDeletedException("Trace ID :*** " + traceId + " *** Will die another day...Get professional help!!!");
 		}
 			
 			
