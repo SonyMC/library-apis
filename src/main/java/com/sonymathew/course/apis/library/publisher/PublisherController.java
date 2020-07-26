@@ -3,6 +3,8 @@ package com.sonymathew.course.apis.library.publisher;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -103,8 +105,9 @@ public PublisherController(PublisherService publisherService) {
 	}	
 	
 	// Create a new publisher 
+	// Note : Wherever we use Publisher model we have to use @Valid annotation for the validation sin that class to take affect 
 	@PostMapping
-	public ResponseEntity<?> addPublisher(@RequestBody Publisher publisher,
+	public ResponseEntity<?> addPublisher(@Valid @RequestBody Publisher publisher,
 										  @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId){
 
 		// Now check if trace id is provided in request by consumer. IF not, we will generate it 
@@ -121,7 +124,7 @@ public PublisherController(PublisherService publisherService) {
 	//Update a Publisher
 	@PutMapping(path = "/{publisherId}")
 	public ResponseEntity<?> UpdatePublisherbyId(@PathVariable Integer publisherId,
-												 @RequestBody Publisher publisherTobeUpdated,
+												 @ Valid @RequestBody Publisher publisherTobeUpdated,
 												 @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId){
 		
 		
