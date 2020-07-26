@@ -21,6 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sonymathew.course.apis.library.exception.PublisherAlreadyExistsException;
+import com.sonymathew.course.apis.library.exception.PublisherBadRequestException;
+import com.sonymathew.course.apis.library.exception.PublisherNotDeletedException;
+import com.sonymathew.course.apis.library.exception.PublisherNotFoundException;
+import com.sonymathew.course.apis.library.exception.PublisherNotUpdatedException;
 import com.sonymathew.course.apis.library.utils.LibraryUtils;
 
 
@@ -49,7 +54,7 @@ public PublisherController(PublisherService publisherService) {
 	// Get publisher by id 
 	@GetMapping(path = "/{publisherId}")
 	public ResponseEntity<?> getPublisherbyId(@PathVariable Integer publisherId,
-			  								  @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId){
+			  								  @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId) throws PublisherNotFoundException{
 		
 		
 		
@@ -72,7 +77,7 @@ public PublisherController(PublisherService publisherService) {
 	// Get publisher by name
 	@GetMapping(path = "/name/{publisherName}")
 	public ResponseEntity<?> getPublisherByName(@PathVariable String publisherName,
-												@RequestHeader(value = "Trace-Id", defaultValue = "") String traceId){
+												@RequestHeader(value = "Trace-Id", defaultValue = "") String traceId) throws PublisherNotFoundException{
 		
 		
 		// Now check if trace id is provided in request by consumer. IF not, we will generate it 
@@ -92,13 +97,16 @@ public PublisherController(PublisherService publisherService) {
 	// Search publisher by name provided in uri query; Note that instead of @PathVariable in parm we use @RequestParam
 	@GetMapping(path = "/search")
 	public ResponseEntity<?> searchPublisherByName(@RequestParam String publisherName,
-												   @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId){
+												   @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId) throws PublisherNotFoundException, PublisherBadRequestException{
 		
 		
 
 		//Check that name query is provided
 		if(!LibraryUtils.doesStringValueExist(publisherName)){
-			return new ResponseEntity<>("Please provide name to be searched as a query in the uri  ", HttpStatus.BAD_REQUEST);
+			
+			// the commented our Response entity exception message is now replaced by teh curomized exception handler class/method 
+			//return new ResponseEntity<>("Please provide name to be searched as a query in the uri  ", HttpStatus.BAD_REQUEST);
+			throw new PublisherBadRequestException(traceId, "Please provide name to be searched as a query in the uri!!!");
 		}
 		
 		logger.info("Trace ID : {}, Request to retrieve Publisher By Name as a query in uri : {}", traceId, publisherName);
@@ -119,7 +127,7 @@ public PublisherController(PublisherService publisherService) {
 	// Note : Wherever we use Publisher model we have to use @Valid annotation for the validation sin that class to take affect 
 	@PostMapping
 	public ResponseEntity<?> addPublisher(@Valid @RequestBody Publisher publisher,
-										  @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId){
+										  @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId) throws PublisherAlreadyExistsException{
 
 		
 		
@@ -140,7 +148,7 @@ public PublisherController(PublisherService publisherService) {
 	@PutMapping(path = "/{publisherId}")
 	public ResponseEntity<?> UpdatePublisherbyId(@PathVariable Integer publisherId,
 												 @ Valid @RequestBody Publisher publisherTobeUpdated,
-												 @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId){
+												 @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId) throws PublisherNotFoundException, PublisherNotUpdatedException{
 		
 		
 		// Now check if trace id is provided in request by consumer. IF not, we will generate it 
@@ -162,7 +170,7 @@ public PublisherController(PublisherService publisherService) {
 	// Delete publisher by id 
 	@DeleteMapping(path = "/{publisherId}")
 	public ResponseEntity<?> deletePublisherbyId(@PathVariable Integer publisherId,
-			 									 @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId){
+			 									 @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId) throws PublisherNotFoundException, PublisherNotDeletedException{
 		
 		// Now check if trace id is provided in request by consumer. IF not, we will generate it 
 		if(!LibraryUtils.doesStringValueExist(traceId)){

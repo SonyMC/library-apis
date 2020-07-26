@@ -73,7 +73,7 @@ public class PublisherService {
 				// The below logging statement is refactored using log4j 
 				//logger.error("Trace ID :*** " + traceId + " ***Duplicate...Publisher already exists, try another name!!!", divExc);
 				logger.error("Trace ID :{},*** Duplicate...Publisher already exists, try another name!!!", traceId, divExc);
-				throw new PublisherAlreadyExistsException("Trace ID :*** " + traceId + " ***Duplicate...Publisher already exists, try another name!!!");
+				throw new PublisherAlreadyExistsException(traceId,"Trace ID :*** " + traceId + " ***Duplicate...Publisher already exists, try another name!!!");
 		}
 		
 		//Now finally set the id of the publisher object
@@ -99,7 +99,7 @@ public class PublisherService {
 			// The below logging statement is refactored using log4j 
 			// logger.error("Trace ID :*** " + traceId + " *** Publisher not Found!!Try with a different id...", divExc);
 			logger.error("Trace ID :{}, *** Publisher not Found!!Try with a different id...", traceId, divExc);
-			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher not Found!!Try with a different id...");
+			throw new PublisherNotFoundException(traceId,"Trace ID :*** " + traceId + " *** Publisher not Found!!Try with a different id...");
 			
 		}
 		
@@ -115,7 +115,7 @@ public class PublisherService {
 			// The below logging statement is refactored using log4j 
 			//logger.error("Trace ID :*** " + traceId + " *** Publisher not Found!!Try with a different id...");
 			logger.error("Trace ID :{}, *** Publisher not Found!!Try with a different id...", traceId);
-			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher ID " + publisherId + " not Found!!Try with a different id...");
+			throw new PublisherNotFoundException(traceId,"Trace ID :*** " + traceId + " *** Publisher ID " + publisherId + " not Found!!Try with a different id...");
 		}
 			
 	}
@@ -133,7 +133,7 @@ public class PublisherService {
 
 	
 	// Get the publisher entity  by name - method 2 where partial name is passed as a query in uri 
-	public List<Publisher> searchPublisher(String publisherName, String traceId) {
+	public List<Publisher> searchPublisher(String publisherName, String traceId) throws PublisherNotFoundException {
 		
 		return findPublisherByName(publisherName,"PartialName",traceId);
 	}
@@ -141,14 +141,14 @@ public class PublisherService {
 
 	
 	//utility method 
-	private List<Publisher> findPublisherByName(String publisherName, String searchMode, String traceId) {
+	private List<Publisher> findPublisherByName(String publisherName, String searchMode, String traceId) throws PublisherNotFoundException {
 		
 		// Check if name is supplied
 		if(!LibraryUtils.doesStringValueExist(publisherName)){
 			// The below logging statement is refactored using log4j 
 			//logger.error("Trace ID :*** " + traceId + " *** Publisher name not supplied !!!");
 			logger.error("Trace ID :{}, *** Publisher name not supplied !!!", traceId);
-			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher name not supplied !!!");
+			throw new PublisherNotFoundException(traceId,"Trace ID :*** " + traceId + " *** Publisher name not supplied !!!");
 		}
 		
 		List<PublisherEntity> publisherEntityList = new ArrayList<PublisherEntity>();
@@ -168,7 +168,7 @@ public class PublisherService {
 		
 		if(publisherEntityList.isEmpty()){
 			logger.error("Trace ID :{}, *** Publisher name " + publisherName + " not Found!!Try with different name...", traceId);
-			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher name " + publisherName + " not Found!!Try with different name...");
+			throw new PublisherNotFoundException(traceId,"Trace ID :*** " + traceId + " *** Publisher name " + publisherName + " not Found!!Try with different name...");
 		}else{
 			logger.info("Trace ID : {}, Gotcha by Name !!! Publisher Found By Name", traceId);
 			return createPublishersForSearchResponse(publisherEntityList);
@@ -199,7 +199,7 @@ public class PublisherService {
 
 
 	// Update the publisher entity  by id 
-	public void updatePublisherbyId(Publisher publisherTobeUpdated, String traceId) throws PublisherNotFoundException {
+	public void updatePublisherbyId(Publisher publisherTobeUpdated, String traceId) throws PublisherNotFoundException, PublisherNotUpdatedException {
 
 		
 		//This is the entity publisher used in the DB table. This is of type optional because we are using this to hold the results from teh JPA API in PublisherRepository.class
@@ -214,7 +214,7 @@ public class PublisherService {
 			// The below logging statement is refactored using log4j 
 			//logger.error("Trace ID :*** " + traceId + " *** Publisher ID " + publisherTobeUpdated.getPublisherID() + " not Found!!Try with a different id...",divExc);
 			logger.error("Trace ID :{}, *** Publisher ID " + publisherTobeUpdated.getPublisherID() + "not Found!!Try with a different id..." , traceId, divExc);
-			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher ID " + publisherTobeUpdated.getPublisherID() + " not Found!!Try with a different id...");
+			throw new PublisherNotFoundException(traceId,"Trace ID :*** " + traceId + " *** Publisher ID " + publisherTobeUpdated.getPublisherID() + " not Found!!Try with a different id...");
 			
 		}
 		
@@ -224,7 +224,7 @@ public class PublisherService {
 			// The below logging statement is refactored using log4j 
 			//logger.error("Trace ID :*** " + traceId + " *** Publisher ID " + publisherTobeUpdated.getPublisherID() + " not Found!!Try with a different id...");
 			logger.error("Trace ID :{}, *** Publisher ID " + publisherTobeUpdated.getPublisherID() + "not Found!!Try with a different id..." , traceId);
-			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher ID " + publisherTobeUpdated.getPublisherID() + " not Found!!Try with a different id...");
+			throw new PublisherNotFoundException(traceId,"Trace ID :*** " + traceId + " *** Publisher ID " + publisherTobeUpdated.getPublisherID() + " not Found!!Try with a different id...");
 		}	
 		
 		
@@ -260,7 +260,7 @@ public class PublisherService {
 					// The below logging statement is refactored using log4j 
 					//logger.error("Trace ID :*** " + traceId + " *** Blimey...something went wrong...contact admin and say SOS!!!",divExc);
 					logger.error("Trace ID :{}, *** Blimey...something went wrong...contact admin and say SOS!!!" , traceId);
-					throw new PublisherNotUpdatedException("Trace ID :*** " + traceId + " *** Blimey...something went wrong...contact admin and say SOS!!!");
+					throw new PublisherNotUpdatedException(traceId,"Trace ID :*** " + traceId + " *** Blimey...something went wrong...contact admin and say SOS!!!");
 				}
 		}	
 			
@@ -269,7 +269,7 @@ public class PublisherService {
 
 
 	// Delete the publisher entity  by id 
-	public void deletePublisherbyId(int publisherId, String traceId) {
+	public void deletePublisherbyId(int publisherId, String traceId) throws PublisherNotFoundException, PublisherNotDeletedException {
 
 		
 		//This is the entity publisher used in the DB table. This is of type optional because we are using this to hold the results from teh JPA API in PublisherRepository.class
@@ -284,7 +284,7 @@ public class PublisherService {
 			// The below logging statement is refactored using log4j 
 			//logger.error("Trace ID :*** " + traceId + " *** Publisher ID " + publisherId + " not Found!!Try with a different id...", divExc);
 			logger.error("Trace ID :{}, *** Publisher ID " + publisherId + "not Found!!Try with a different id..." ,traceId);
-			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher ID " + publisherId + " not Found!!Try with a different id...");
+			throw new PublisherNotFoundException(traceId,"Trace ID :*** " + traceId + " *** Publisher ID " + publisherId + " not Found!!Try with a different id...");
 			
 		}
 		
@@ -294,7 +294,7 @@ public class PublisherService {
 			// The below logging statement is refactored using log4j 
 			//logger.error("Trace ID :*** " + traceId + " *** Publisher ID " + publisherId + " not Found!!Try with a different id...");
 			logger.error("Trace ID :{}, *** Publisher ID " + publisherId + "not Found!!Try with a different id..." ,traceId);
-			throw new PublisherNotFoundException("Trace ID :*** " + traceId + " *** Publisher ID " + publisherId + " not Found!!Try with a different id...");
+			throw new PublisherNotFoundException(traceId,"Trace ID :*** " + traceId + " *** Publisher ID " + publisherId + " not Found!!Try with a different id...");
 		}	
 		
 		//map to publisher entity object 
@@ -310,7 +310,7 @@ public class PublisherService {
 				// The below logging statement is refactored using log4j 
 				//logger.error("Trace ID :*** " + traceId + " *** Will die another day...Get professional help!!!",divExc);
 				logger.error("Trace ID :{}, *** *** Will die another day...Get professional help!!!" ,traceId,divExc);
-				throw new PublisherNotDeletedException("Trace ID :*** " + traceId + " *** Will die another day...Get professional help!!!");
+				throw new PublisherNotDeletedException(traceId,"Trace ID :*** " + traceId + " *** Will die another day...Get professional help!!!");
 		}
 			
 			
