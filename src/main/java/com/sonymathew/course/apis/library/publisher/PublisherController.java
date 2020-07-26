@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,8 @@ public class PublisherController {
 private PublisherService publisherService;
 
 
+private static Logger logger = LoggerFactory.getLogger(PublisherController.class);
+
 public PublisherController(PublisherService publisherService) {
 	this.publisherService = publisherService;
 }
@@ -48,11 +52,14 @@ public PublisherController(PublisherService publisherService) {
 			  								  @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId){
 		
 		
+		
+		
 		// Now check if trace id is provided in request by consumer. IF not, we will generate it 
 		if(!LibraryUtils.doesStringValueExist(traceId)){
 			traceId = UUID.randomUUID().toString();
 		}
 		
+		logger.info("Trace ID : {}, Request to retrieve Publisher By ID: {}", traceId, publisherId);
 		
 		// Note : The exception handling has been moved out to the service class 
 		Publisher publisherbyId = publisherService.getPublisherbyId(publisherId, traceId);
@@ -71,7 +78,9 @@ public PublisherController(PublisherService publisherService) {
 		// Now check if trace id is provided in request by consumer. IF not, we will generate it 
 		if(!LibraryUtils.doesStringValueExist(traceId)){
 			traceId = UUID.randomUUID().toString();
-		}		
+		}	
+		
+		logger.info("Trace ID : {}, Request to retrieve Publisher By Name : {}", traceId, publisherName);
 		
 		// Note : The exception handling has been moved out to the service class 
 		List<Publisher> publisherList = publisherService.getPublisherbyName(publisherName, traceId);
@@ -92,6 +101,8 @@ public PublisherController(PublisherService publisherService) {
 			return new ResponseEntity<>("Please provide name to be searched as a query in the uri  ", HttpStatus.BAD_REQUEST);
 		}
 		
+		logger.info("Trace ID : {}, Request to retrieve Publisher By Name as a query in uri : {}", traceId, publisherName);
+		
 		// Now check if trace id is provided in request by consumer. IF not, we will generate it 
 		if(!LibraryUtils.doesStringValueExist(traceId)){
 			traceId = UUID.randomUUID().toString();
@@ -110,10 +121,14 @@ public PublisherController(PublisherService publisherService) {
 	public ResponseEntity<?> addPublisher(@Valid @RequestBody Publisher publisher,
 										  @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId){
 
+		
+		
 		// Now check if trace id is provided in request by consumer. IF not, we will generate it 
 		if(!LibraryUtils.doesStringValueExist(traceId)){
 			traceId = UUID.randomUUID().toString();
 		}	
+		
+		logger.info("Trace ID : {}, Request to create Publisher: {}", traceId,publisher);
 		
 		// Note : The exception handling has been moved out to the service class 
 		publisherService.addPublisher(publisher, traceId);
@@ -132,6 +147,8 @@ public PublisherController(PublisherService publisherService) {
 		if(!LibraryUtils.doesStringValueExist(traceId)){
 			traceId = UUID.randomUUID().toString();
 		}
+		
+		logger.info("Trace ID : {}, Request to update Publisher: {}", traceId,publisherTobeUpdated);
 		
 		// We need to set the publisher id with what has been supplied in the path ,else whatever publisher is passed in parm will be updated.
 		publisherTobeUpdated.setPublisherID(publisherId);
@@ -152,6 +169,8 @@ public PublisherController(PublisherService publisherService) {
 			traceId = UUID.randomUUID().toString();
 		}
 		
+		
+		logger.info("Trace ID : {}, Request to delete Publisher: {}", traceId,publisherId);
 		// Note : The exception handling has been moved out to the service class 
 		publisherService.deletePublisherbyId(publisherId, traceId);
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
