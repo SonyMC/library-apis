@@ -65,6 +65,7 @@ public class PublisherService {
 		// Create publisher entity from publisher object in request
 		PublisherEntity publisherEntity = createPublisherEntity(publisherToBeAdded);
 		
+		
 		//This is the entity publisher that will used to save to the DB table using the publisher entity we just created above 
 		PublisherEntity addedPublisherEntity = null;
 		try{
@@ -189,7 +190,7 @@ public class PublisherService {
 	
 	
 	
-	// utility method
+	// utility method to convert Publisher Entity List to Publisher Object list
 	private List<Publisher> createPublishersForSearchResponse(List<PublisherEntity> publisherEntityList) {
 		
 		return publisherEntityList.stream()
