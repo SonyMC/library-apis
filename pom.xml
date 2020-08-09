@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sonymathew.course.apis</groupId>
-	<artifactId>library-api</artifactId>
+	<artifactId>library-api-v2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>library-api</name>
+	<name>library-api-v2</name>
 	<description>Library API </description>
 
 	<properties>
@@ -29,16 +29,28 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<!--  SQL connector( We are going to use MySQL for DB -->
+		<!--  SQL connector: We are going to use MySQL for DB -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>		
+		<!-- Validaton : Use this if you want to validate input -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId> <!-- Use this if you want to validate input -->
+			<artifactId>spring-boot-starter-validation</artifactId> 
 		</dependency>		
-
+		<!--Security :  Use this for API security 	-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId> 
+		</dependency>	
+		<!--JWT :  Handling JWT handling functionality . We have to specify version as thsi is not packaged with Spring Boot -->	
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId> 
+			<version>3.8.0</version>  
+		</dependency>		
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>

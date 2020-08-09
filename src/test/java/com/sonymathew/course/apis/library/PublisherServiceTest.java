@@ -31,16 +31,16 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import com.sonymathew.course.apis.library.exception.PublisherAlreadyExistsException;
-import com.sonymathew.course.apis.library.exception.PublisherNotDeletedException;
-import com.sonymathew.course.apis.library.exception.PublisherNotFoundException;
-import com.sonymathew.course.apis.library.exception.PublisherNotUpdatedException;
-import com.sonymathew.course.apis.library.publisher.Publisher;
-import com.sonymathew.course.apis.library.publisher.PublisherEntity;
-import com.sonymathew.course.apis.library.publisher.PublisherRepository;
-import com.sonymathew.course.apis.library.publisher.PublisherService;
 import com.sonymathew.course.apis.library.utils.LibraryApiTestUtil;
 import com.sonymathew.course.apis.library.utils.TestConstants;
+import com.sonymathew.course.apis.libraryapis.exception.PublisherAlreadyExistsException;
+import com.sonymathew.course.apis.libraryapis.exception.PublisherNotDeletedException;
+import com.sonymathew.course.apis.libraryapis.exception.PublisherNotFoundException;
+import com.sonymathew.course.apis.libraryapis.exception.PublisherNotUpdatedException;
+import com.sonymathew.course.apis.libraryapis.publisher.Publisher;
+import com.sonymathew.course.apis.libraryapis.publisher.PublisherEntity;
+import com.sonymathew.course.apis.libraryapis.publisher.PublisherRepository;
+import com.sonymathew.course.apis.libraryapis.publisher.PublisherService;
 
 
 
