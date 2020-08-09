@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sonymathew.course.apis.libraryapis.exception.LibraryResourceUnauthorizedException;
 import com.sonymathew.course.apis.libraryapis.exception.PublisherAlreadyExistsException;
 import com.sonymathew.course.apis.libraryapis.exception.PublisherBadRequestException;
 import com.sonymathew.course.apis.libraryapis.exception.PublisherNotDeletedException;
@@ -124,17 +125,32 @@ public PublisherController(PublisherService publisherService) {
 	}	
 	
 	// Create a new publisher 
-	// Note : Wherever we use Publisher model we have to use @Valid annotation for the validation sin that class to take affect 
+	// Note : Wherever we use Publisher model we have to use @Valid annotation for the validations in that class to take effect 
+	// Note : A publusher should only by added by an user admin.
 	@PostMapping
+/*  psst..We have changed the signature to include the authorization bearer token which will be used to check if user is an admin or not
 	public ResponseEntity<?> addPublisher(@Valid @RequestBody Publisher publisher,
-										  @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId) throws PublisherAlreadyExistsException{
+										  @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId)    
+							 throws PublisherAlreadyExistsException{
 
-		
+ */
+	public ResponseEntity<?> addPublisher(@Valid @RequestBody Publisher publisher,
+				  						  @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId,
+				  						  @RequestHeader(value = "Authorization") String bearerToken )   // The "Authorization" Header is set in the JwtAuthenticationFilter class
+				  	  		throws PublisherAlreadyExistsException, LibraryResourceUnauthorizedException{	
 		
 		// Now check if trace id is provided in request by consumer. IF not, we will generate it 
 		if(!LibraryApiUtils.doesStringValueExist(traceId)){
 			traceId = UUID.randomUUID().toString();
 		}	
+		
+		//We need to check whether the request to create a publisher is coming from an admin or not 
+		//Validate the Authorization Header containing bearer token for admin role
+		if(! LibraryApiUtils.isUserAdmin(bearerToken)){
+			logger.error(LibraryApiUtils.getUserIDFromClaim(bearerToken) + " : user does not have permission to create a publisher!!! ");
+			throw new LibraryResourceUnauthorizedException(traceId, "User not allowed to add a publisher!!!");
+		}
+		
 		
 		logger.info("Trace ID : {}, Request to create Publisher: {}", traceId,publisher);
 		
@@ -146,16 +162,33 @@ public PublisherController(PublisherService publisherService) {
 	
 	//Update a Publisher
 	@PutMapping(path = "/{publisherId}")
-	public ResponseEntity<?> UpdatePublisherbyId(@PathVariable Integer publisherId,
+	
+	/*  -->  psst..We have changed the signature to include the authorization bearer token
+	public ResponseEntity<?> UpdatePublisherbyId(@PathVariable Integer publisherId, 
 												 @ Valid @RequestBody Publisher publisherTobeUpdated,
 												 @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId) throws PublisherNotFoundException, PublisherNotUpdatedException{
+	
+	*/
+	public ResponseEntity<?> UpdatePublisherbyId(@PathVariable Integer publisherId,
+				 								 @ Valid @RequestBody Publisher publisherTobeUpdated,
+				 								 @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId,
+				 								 @RequestHeader(value = "Authorization") String bearerToken) 
+				 			 throws PublisherNotFoundException, PublisherNotUpdatedException, LibraryResourceUnauthorizedException{		
 		
 		
-		// Now check if trace id is provided in request by consumer. IF not, we will generate it 
+		// Now check if trace id is provided in request by consumer. Ie not, we will generate it ...
 		if(!LibraryApiUtils.doesStringValueExist(traceId)){
 			traceId = UUID.randomUUID().toString();
 		}
 		
+
+		//We need to check whether the request to update a publisher is coming from an admin or not 
+		//Validate the Authorization Header containing bearer token for admin role
+		if(! LibraryApiUtils.isUserAdmin(bearerToken)){
+			logger.error(LibraryApiUtils.getUserIDFromClaim(bearerToken) + " : user does not have permission to update a publisher!!! ");
+			throw new LibraryResourceUnauthorizedException(traceId, "User not allowed to update a publisher!!!");
+		}	
+
 		logger.info("Trace ID : {}, Request to update Publisher: {}", traceId,publisherTobeUpdated);
 		
 		// We need to set the publisher id with what has been supplied in the path ,else whatever publisher is passed in parm will be updated.
@@ -170,13 +203,23 @@ public PublisherController(PublisherService publisherService) {
 	// Delete publisher by id 
 	@DeleteMapping(path = "/{publisherId}")
 	public ResponseEntity<?> deletePublisherbyId(@PathVariable Integer publisherId,
-			 									 @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId) throws PublisherNotFoundException, PublisherNotDeletedException{
+			 									 @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId,
+			 									@RequestHeader(value = "Authorization") String bearerToken) 
+			 				 throws PublisherNotFoundException, PublisherNotDeletedException, LibraryResourceUnauthorizedException{
 		
 		// Now check if trace id is provided in request by consumer. IF not, we will generate it 
 		if(!LibraryApiUtils.doesStringValueExist(traceId)){
 			traceId = UUID.randomUUID().toString();
 		}
 		
+		
+		//We need to check whether the request to delete a publisher is coming from an admin or not 
+		//Validate the Authorization Header containing bearer token for admin role
+		if(! LibraryApiUtils.isUserAdmin(bearerToken)){
+			logger.error(LibraryApiUtils.getUserIDFromClaim(bearerToken) + " : user does not have permission to delete a publisher!!! ");
+			throw new LibraryResourceUnauthorizedException(traceId, "User not allowed to delete a publisher!!!");
+		}	
+	
 		
 		logger.info("Trace ID : {}, Request to delete Publisher: {}", traceId,publisherId);
 		// Note : The exception handling has been moved out to the service class 

@@ -1,8 +1,6 @@
 package com.sonymathew.course.apis.libraryapis.user;
 
 import com.sonymathew.course.apis.libraryapis.exception.*;
-import com.sonymathew.course.apis.libraryapis.exception.LibraryResourceBadRequestException;
-import com.sonymathew.course.apis.libraryapis.exception.LibraryResourceNotFoundException;
 import com.sonymathew.course.apis.libraryapis.user.User;
 import com.sonymathew.course.apis.libraryapis.user.UserService;
 import com.sonymathew.course.apis.libraryapis.utils.*;
@@ -58,13 +56,27 @@ public class UserController {
 
     @PutMapping(path = "/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable Integer userId,
-                                             @Valid @RequestBody User user,
-                                             @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId)
-            throws LibraryResourceNotFoundException {
+                                        @Valid @RequestBody User user,
+                                        @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId,
+                                        @RequestHeader(value = "Authorization") String bearerToken) 
+                              throws LibraryResourceNotFoundException, LibraryResourceUnauthorizedException {
 
         if(!LibraryApiUtils.doesStringValueExist(traceId)) {
             traceId = UUID.randomUUID().toString();
         }
+        
+		//We will not allow even an admin to update another user.
+		if(LibraryApiUtils.isUserAdmin(bearerToken)){
+			logger.error("Trace ID : {}, Sorry..being an admin does not give you the right to correct others!!!", traceId);
+			throw new LibraryResourceUnauthorizedException(traceId, "Sorry..being an admin does not give you the right to correct others!!!");
+		}
+		
+		// Now we will only allow a user to update own details
+		int userIdInClaim = LibraryApiUtils.getUserIDFromClaim(bearerToken);
+		if(userIdInClaim != userId ){ // i.e. the user is tryign to update someone else
+			logger.error("Trace ID : {}, UserID :{} - : user has bad manners tryign to correct someone else!!! ",traceId,userId);
+			throw new LibraryResourceUnauthorizedException(traceId, "It is bad manners trying to correct someone else!!!");
+		}
 
         user.setUserId(userId);
         userService.updateUser(user, traceId);
@@ -74,12 +86,20 @@ public class UserController {
 
     @DeleteMapping(path = "/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable Integer userId,
-                                             @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId)
-            throws LibraryResourceNotFoundException {
+                                        @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId,
+                                        @RequestHeader(value = "Authorization") String bearerToken) 
+            throws LibraryResourceNotFoundException, LibraryResourceUnauthorizedException {
 
         if(!LibraryApiUtils.doesStringValueExist(traceId)) {
             traceId = UUID.randomUUID().toString();
         }
+        
+		// User can delete only his/her own details
+		int userIdInClaim = LibraryApiUtils.getUserIDFromClaim(bearerToken);
+		if(!LibraryApiUtils.isUserAdmin(bearerToken) && userIdInClaim != userId){ // i.e. the user not te admin and is tryign to delete someone else
+			logger.error("Trace ID : {}, UserID :{} - : user is a psychopath and is trying to erase someone else!!! ",traceId,userId);
+			throw new LibraryResourceUnauthorizedException(traceId, "Consult a psychiatrist ... cannot allow you to deelte someone else..though suicide is allowed!!!");
+		}      
 
         userService.deleteUser(userId, traceId);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);

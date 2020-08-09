@@ -22,14 +22,99 @@ public class LibraryControllerCustomizedExceptionHandler extends ResponseEntityE
 	
 	private static Logger logger = LoggerFactory.getLogger(LibraryControllerCustomizedExceptionHandler.class);
 	
+
+	@ExceptionHandler(PublisherAlreadyExistsException.class)
+	public final ResponseEntity<LibraryApiError> publisherAlreadyExists(PublisherAlreadyExistsException ex, WebRequest request) {
+		
+		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
+		logger.error(ex.getTraceId(), ex);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.CONFLICT);
+		
+	}	
+	
+	@ExceptionHandler(PublisherNotFoundException.class)
+	public final ResponseEntity<LibraryApiError> publisherNotFound(PublisherNotFoundException ex, WebRequest request) throws Exception {
+		
+		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
+		logger.error(ex.getTraceId(), ex);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.NOT_FOUND);
+	
+		
+	}	
+	
+	@ExceptionHandler(PublisherNotUpdatedException.class)
+	public final ResponseEntity<LibraryApiError> publisherNotUpdated(PublisherNotUpdatedException ex, WebRequest request) throws Exception {
+		
+		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
+		logger.error(ex.getTraceId(), ex);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.NOT_MODIFIED);
+	
+		
+	}
+	
+	@ExceptionHandler(PublisherNotDeletedException.class)
+	public final ResponseEntity<LibraryApiError> publisherNotDeleted(PublisherNotDeletedException ex, WebRequest request) throws Exception {
+		
+		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
+		logger.error(ex.getTraceId(), ex);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.INTERNAL_SERVER_ERROR);
+	
+		
+	}	
+	
+	@ExceptionHandler(PublisherBadRequestException.class)
+	public final ResponseEntity<LibraryApiError> publisherBadRequest(PublisherBadRequestException ex, WebRequest request) throws Exception {
+		
+		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
+		logger.error(ex.getTraceId(), ex);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.BAD_REQUEST);
+	
+		
+	}	
+
+    @ExceptionHandler(LibraryResourceNotFoundException.class)
+    public final ResponseEntity<LibraryApiError> handleLibraryResourceNotFoundException(
+            LibraryResourceNotFoundException ex,WebRequest request){
+	   
+		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
+		logger.error(ex.getTraceId(), ex);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.NOT_FOUND);
+
+    }
+
+    @ExceptionHandler(LibraryResourceAlreadyExistsException.class)
+    public final ResponseEntity<LibraryApiError> handleLibraryResourceAlreadyExistException(
+            LibraryResourceAlreadyExistsException ex, WebRequest request) {
+
+		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
+		logger.error(ex.getTraceId(), ex);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(LibraryResourceBadRequestException.class)
+    public final ResponseEntity<LibraryApiError> handleLibraryResourceBadRequestException(
+            LibraryResourceBadRequestException ex, WebRequest request) {
+		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
+		logger.error(ex.getTraceId(), ex);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(LibraryResourceUnauthorizedException.class)
+    public final ResponseEntity<LibraryApiError> handleLibraryResourceUnauthorizedException(
+            LibraryResourceUnauthorizedException ex, WebRequest request) {
+		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
+		logger.error(ex.getTraceId(), ex);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.FORBIDDEN);
+    }
+
 	@ExceptionHandler(Exception.class)
-	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
+	public final ResponseEntity<LibraryApiError> handleAllExceptions(Exception ex, WebRequest request) {
 		
 		// Thsi is the generic excpetion handler mehod which is nto tied to any particular class. Hence we would need to generate a Trace ID.
 		String traceId = getTraceId(request);
 		LibraryApiError exceptionResponse =new LibraryApiError(traceId,new Date(), ex.getMessage(), request.getDescription(true));
 		logger.error(traceId, ex);
-		return new ResponseEntity<Object>(exceptionResponse,HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.INTERNAL_SERVER_ERROR);
 	
 	} 
 	
@@ -42,54 +127,5 @@ public class LibraryControllerCustomizedExceptionHandler extends ResponseEntityE
 		}
 		return traceId;
 	}
-
-	@ExceptionHandler(PublisherAlreadyExistsException.class)
-	public final ResponseEntity<Object> publisherAlreadyExists(PublisherAlreadyExistsException ex, WebRequest request) {
-		
-		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
-		logger.error(ex.getTraceId(), ex);
-		return new ResponseEntity<Object>(exceptionResponse,HttpStatus.CONFLICT);
-		
-	}	
 	
-	@ExceptionHandler(PublisherNotFoundException.class)
-	public final ResponseEntity<Object> publisherNotFound(PublisherNotFoundException ex, WebRequest request) throws Exception {
-		
-		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
-		logger.error(ex.getTraceId(), ex);
-		return new ResponseEntity<Object>(exceptionResponse,HttpStatus.NOT_FOUND);
-	
-		
-	}	
-	
-	@ExceptionHandler(PublisherNotUpdatedException.class)
-	public final ResponseEntity<Object> publisherNotUpdated(PublisherNotUpdatedException ex, WebRequest request) throws Exception {
-		
-		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
-		logger.error(ex.getTraceId(), ex);
-		return new ResponseEntity<Object>(exceptionResponse,HttpStatus.NOT_MODIFIED);
-	
-		
-	}
-	
-	@ExceptionHandler(PublisherNotDeletedException.class)
-	public final ResponseEntity<Object> publisherNotDeleted(PublisherNotDeletedException ex, WebRequest request) throws Exception {
-		
-		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
-		logger.error(ex.getTraceId(), ex);
-		return new ResponseEntity<Object>(exceptionResponse,HttpStatus.INTERNAL_SERVER_ERROR);
-	
-		
-	}	
-	
-	@ExceptionHandler(PublisherBadRequestException.class)
-	public final ResponseEntity<Object> publisherBadRequest(PublisherBadRequestException ex, WebRequest request) throws Exception {
-		
-		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
-		logger.error(ex.getTraceId(), ex);
-		return new ResponseEntity<Object>(exceptionResponse,HttpStatus.BAD_REQUEST);
-	
-		
-	}	
-
 }

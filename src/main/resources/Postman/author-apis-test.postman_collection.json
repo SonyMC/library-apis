@@ -1,0 +1,141 @@
+{
+	"info": {
+		"_postman_id": "51133f97-403b-4efb-a41d-626fe51fc354",
+		"name": "author-apis-test",
+		"description": "Collection of requests for Author API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Author",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"firstName\":\"Sydney\",\r\n\"lastName\":\"Sheldon\",\r\n\"dateOfBirth\":\"1950-02-14\",\r\n\"gender\":\"Undisclosed\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/v1/authors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"v1",
+						"authors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAuthorByID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/v1/authors/3065",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"v1",
+						"authors",
+						"3065"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SearchAuthorByNameQuery",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/v1/authors/search?firstName=Henri&lastName=Charierre",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"v1",
+						"authors",
+						"search"
+					],
+					"query": [
+						{
+							"key": "firstName",
+							"value": "Henri"
+						},
+						{
+							"key": "lastName",
+							"value": "Charierre"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateAuthorByIDandObject",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Sydney\",\r\n    \"lastName\": \"Sheldon\",\r\n    \"dateOfBirth\": \"1950-02-14\",\r\n    \"gender\": \"Male\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/3065",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"3065"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteAuthorByID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/v1/authors/3065",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"v1",
+						"authors",
+						"3065"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
