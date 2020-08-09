@@ -22,7 +22,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
 //1. This class will be called by the user after getting the JWT token in the JwtAuthenticationFilter class.
-//2. Thsi calls will essentially allow the user to call subsequent APIs using the JWT issued above
+//2. This calls will essentially allow the user to call subsequent APIs using the JWT issued above
 //3. We will extend BasicAuthenticationFilter which is used to authorize details in the Http Request Header 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 

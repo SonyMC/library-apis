@@ -43,15 +43,15 @@ public class UserService {
         UserEntity userEntity = new UserEntity(
                 userToBeAdded.getUsername(),
                 //SecurityConstants.NEW_USER_DEFAULT_PASSWORD,
-                bCryptPasswordEncoder.encode(userToBeAdded.getPassword()) ,
-                //bCryptPasswordEncoder.encode(SecurityConstants.NEW_USER_DEFAULT_PASSWORD),
+              //bCryptPasswordEncoder.encode(SecurityConstants.NEW_USER_DEFAULT_PASSWORD),
+                bCryptPasswordEncoder.encode(userToBeAdded.getPassword()) ,         
                 userToBeAdded.getFirstName(),
                 userToBeAdded.getLastName(),
                 userToBeAdded.getDateOfBirth(),
                 userToBeAdded.getGender(),
                 userToBeAdded.getPhoneNumber(),
                 userToBeAdded.getEmailId(),
-                "USER");
+                "USER"); // by default all users have been assigned teh role of "USER"
 
         userToBeAdded.setPassword(SecurityConstants.NEW_USER_DEFAULT_PASSWORD);
         UserEntity addedUser = null;
@@ -107,7 +107,6 @@ public class UserService {
 
 
     public void deleteUser(Integer userId, String traceId) throws LibraryResourceNotFoundException {
-
         try {
             userRepository.deleteById(userId);
         } catch(EmptyResultDataAccessException e) {
