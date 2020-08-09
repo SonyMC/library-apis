@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.sonymathew.course.apis.library.publisher.Publisher;
-import com.sonymathew.course.apis.library.publisher.PublisherEntity;
+import com.sonymathew.course.apis.libraryapis.publisher.Publisher;
+import com.sonymathew.course.apis.libraryapis.publisher.PublisherEntity;
 
 public class LibraryApiTestUtil {
 	
