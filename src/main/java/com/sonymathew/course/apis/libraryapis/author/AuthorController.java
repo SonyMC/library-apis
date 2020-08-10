@@ -41,8 +41,9 @@ public class AuthorController {
 
     @PostMapping
     public ResponseEntity<?> addAuthor(@Valid @RequestBody Author author,
-                                          @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId)
-            throws LibraryResourceAlreadyExistsException {
+                                       @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId,
+                                       @RequestHeader(value = "Authorization") String bearerToken )   // The "Authorization" Header is set in the JwtAuthenticationFilter class)
+            throws LibraryResourceAlreadyExistsException, LibraryResourceUnauthorizedException {
 
         logger.debug("Request to add Author: {}", author);
         if(!LibraryApiUtils.doesStringValueExist(traceId)) {
@@ -50,7 +51,15 @@ public class AuthorController {
         }
         logger.debug("Added TraceId: {}", traceId);
         authorService.addAuthor(author, traceId);
-
+        
+		//We need to check whether the request to create an author is coming from an admin or not 
+		//Validate the Authorization Header containing bearer token for admin role
+		if(! LibraryApiUtils.isUserAdmin(bearerToken)){
+			logger.error(LibraryApiUtils.getUserIDFromClaim(bearerToken) + " : user does not have permission to add an author!!! ");
+			throw new LibraryResourceUnauthorizedException(traceId, "User not allowed to add an author!!!");
+		}       
+        
+        
         logger.debug("Returning response for TraceId: {}", traceId);
         return new ResponseEntity<>(author, HttpStatus.CREATED);
     }
@@ -58,13 +67,21 @@ public class AuthorController {
     @PutMapping(path = "/{authorId}")
     public ResponseEntity<?> updateAuthor(@PathVariable Integer authorId,
                                              @Valid @RequestBody Author author,
-                                             @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId)
-            throws LibraryResourceNotFoundException {
+                                             @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId,
+                                             @RequestHeader(value = "Authorization") String bearerToken )   // The "Authorization" Header is set in the JwtAuthenticationFilter class)
+            throws LibraryResourceNotFoundException, LibraryResourceUnauthorizedException {
 
         if(!LibraryApiUtils.doesStringValueExist(traceId)) {
             traceId = UUID.randomUUID().toString();
         }
-
+        
+		//We need to check whether the request to update an author is coming from an admin or not 
+		//Validate the Authorization Header containing bearer token for admin role
+		if(! LibraryApiUtils.isUserAdmin(bearerToken)){
+			logger.error(LibraryApiUtils.getUserIDFromClaim(bearerToken) + " : user does not have permission to update an author!!! ");
+			throw new LibraryResourceUnauthorizedException(traceId, "User not allowed to update an author!!!");
+		}	
+       
         author.setAuthorId(authorId);
         authorService.updateAuthor(author, traceId);
 
@@ -73,12 +90,20 @@ public class AuthorController {
 
     @DeleteMapping(path = "/{authorId}")
     public ResponseEntity<?> deleteAuthor(@PathVariable Integer authorId,
-                                             @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId)
-            throws LibraryResourceNotFoundException {
+                                          @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId,
+                                          @RequestHeader(value = "Authorization") String bearerToken) 
+            throws LibraryResourceNotFoundException, LibraryResourceUnauthorizedException {
 
         if(!LibraryApiUtils.doesStringValueExist(traceId)) {
             traceId = UUID.randomUUID().toString();
         }
+        
+		//We need to check whether the request to delete an author is coming from an admin or not 
+		//Validate the Authorization Header containing bearer token for admin role
+		if(! LibraryApiUtils.isUserAdmin(bearerToken)){
+			logger.error(LibraryApiUtils.getUserIDFromClaim(bearerToken) + " : user does not have permission to delete an author!!! ");
+			throw new LibraryResourceUnauthorizedException(traceId, "User not allowed to delete an author!!!");
+		}	       
 
         authorService.deleteAuthor(authorId, traceId);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
