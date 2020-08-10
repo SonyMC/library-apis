@@ -34,7 +34,7 @@ public class LibraryApiSecurityConfig extends WebSecurityConfigurerAdapter{
 	/// This function will be used to configure which requests shoud not challenged , which should be challenged and the authentication and authization filters appplied. Will also specify the session configuration.
 	public void configure(HttpSecurity httpSecurity) throws Exception   {
 		try {
-			httpSecurity.cors().and().csrf().disable()  // disable cors(Cross Origin Resource Sharing) and csrf(Cross site resource forgery) is disaled for non browser clients
+			httpSecurity.cors().and().csrf().disable()  // disable cors(Cross Origin Resource Sharing) and csrf(Cross site resource forgery) is disabled for non browser clients
 						.authorizeRequests()  // now authorize the following request matching th below criteria
 				//		.antMatchers(HttpMethod.GET).permitAll()  // allow all gets 
 				//		.antMatchers(HttpMethod.GET,SecurityConstants.GET_PUBLISHER_BY_ID).permitAll()//  allow get publishers by ID request 
@@ -45,7 +45,7 @@ public class LibraryApiSecurityConfig extends WebSecurityConfigurerAdapter{
 						.and()  // add our customized authentication & authorization fiters 
 						.addFilter(new JwtAuthenticationFilter(authenticationManager())) // Authentication filter class
 						.addFilter(new JwtAuthorizationFilter(authenticationManager()))  // Authorization filter class
-						.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);// Since we are using Rest services, we will not need a session. By declaring teh policy as Stateless, Spring Security will never create an HttpSession and it will never use itto obtain the SecurityContext
+						.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);// Since we are using Rest services, we will not need a session. By declaring the policy as Stateless, Spring Security will never create an HttpSession and it will never use it to obtain the SecurityContext
 		} catch (Exception ex) {
 			logger.error("Failed to configure security in class {}!!!", LibraryApiSecurityConfig.class,ex.getMessage());
 			throw ex;

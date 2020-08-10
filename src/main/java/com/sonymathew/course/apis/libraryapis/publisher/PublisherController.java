@@ -204,7 +204,7 @@ public PublisherController(PublisherService publisherService) {
 	@DeleteMapping(path = "/{publisherId}")
 	public ResponseEntity<?> deletePublisherbyId(@PathVariable Integer publisherId,
 			 									 @RequestHeader(value = "Trace-Id", defaultValue = "") String traceId,
-			 									@RequestHeader(value = "Authorization") String bearerToken) 
+			 									 @RequestHeader(value = "Authorization") String bearerToken) 
 			 				 throws PublisherNotFoundException, PublisherNotDeletedException, LibraryResourceUnauthorizedException{
 		
 		// Now check if trace id is provided in request by consumer. IF not, we will generate it 

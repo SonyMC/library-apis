@@ -94,9 +94,9 @@ public class UserController {
             traceId = UUID.randomUUID().toString();
         }
         
-		// User can delete only his/her own details
+		// User can delete only his/her own details unless until the user is the admin
 		int userIdInClaim = LibraryApiUtils.getUserIDFromClaim(bearerToken);
-		if(!LibraryApiUtils.isUserAdmin(bearerToken) && userIdInClaim != userId){ // i.e. the user not te admin and is tryign to delete someone else
+		if(!LibraryApiUtils.isUserAdmin(bearerToken) && userIdInClaim != userId){ // i.e. the user not the admin and is tryign to delete someone else
 			logger.error("Trace ID : {}, UserID :{} - : user is a psychopath and is trying to erase someone else!!! ",traceId,userId);
 			throw new LibraryResourceUnauthorizedException(traceId, "Consult a psychiatrist ... cannot allow you to deelte someone else..though suicide is allowed!!!");
 		}      

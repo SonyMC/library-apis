@@ -31,7 +31,7 @@ import com.sonymathew.course.apis.libraryapis.user.User;
 // 1.This class is first in chain of authorisation responsible for authentcating the input usser & pwd and returnign a jwt token
 // 2.In this case the username and pwd will need to be set using a login REST API as we do not have web form UI
 // 3.Spring automatically figues where this filter should fit in the whole security chain though if we want we can define the trigerrign point. We won't do this here.
-// 4. Once this class is executed, the user will tak the JWT token returned and call the JWTAuthorizationFilter class which will be the second in command to thsi class. 
+// 4. Once this class is executed, the user will take the JWT token returned and call the JWTAuthorizationFilter class which will be the second in command to this class. 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 	
 	// create logger
@@ -63,6 +63,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			// Construct User object using Jackson mapper on the input request with reference to User class 
 			inputUser = new ObjectMapper().readValue(request.getInputStream(), User.class);
 			//Now generate authentication token for User name & pwd 
+			//Once the authenticate() function is called successfully , the Authenticate instance will contain teh details of the user as loaded from the DB.
 			authenticate =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(inputUser.getUsername(), inputUser.getPassword(), new ArrayList<>()));
 			//authenticate =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(inputUser.getUsername(), inputUser.getPassword()));
 			
@@ -99,7 +100,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	throws IOException, ServletException{
 		
 		// Get user from authentication token.
-		// Here the principal obeject in teh authenticaltion token is user as used in teh above function 
+		// Here the principal object in the authentcaltion token is user as loaded from the DB in the above function 
 		User authUser = (User) auth.getPrincipal();
 		
 		//hash the secret key using HMAC512 algorithm

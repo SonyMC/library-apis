@@ -54,7 +54,7 @@ public class ApplicationInitializer {
 								bCryptPasswordEncoder.encode(adminPassword), 
 								"Library", 
 								"Admin", 
-								LocalDate.now().minusYears(30),  // let the age be 30 years and DOB wll be set accordingly
+								LocalDate.now().minusYears(30),  // let the age be 30 years and DOB will be set accordingly
 								Gender.Female, 
 								"999-888-777", 
 								"library.admin@library.com", 

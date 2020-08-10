@@ -36,7 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		User user = null;
 		
 		try{
-			user = userService.getUserByUserName(userName)	;
+			user = userService.getUserByUserName(userName)	;   // usenam eis unique
 			}catch(LibraryResourceNotFoundException libNfEx){
 			throw new UsernameNotFoundException(libNfEx.getMessage());
 			}
