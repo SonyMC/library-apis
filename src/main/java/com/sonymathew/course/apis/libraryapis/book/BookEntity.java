@@ -44,17 +44,17 @@ public class BookEntity {
 	@Column(name="Edition")
 	private String edition;	
 	
-	// Many books can have one publisher. Publisher Id is the fk to the table publishe. Mapping with book is many-to-one as the same publiher can publish many books
+	// Many books can have one publisher. Publisher Id is the fk to the table publisher. Mapping with book is many-to-one as the same publiher can publish many books
 	@ManyToOne(fetch=FetchType.LAZY,cascade = CascadeType.ALL) //The meaning of CascadeType. ALL is that the persistence will propagate (cascade) all EntityManager operations ( PERSIST, REMOVE, REFRESH, MERGE, DETACH ) to the relating entities
 	@JoinColumn(name="Publisher_Id", nullable= false)  // tells to which table column this is a foreign key of. Hibernate will automatically determine the table name.
 	private PublisherEntity publisher;   
 	
 	
-	@OneToOne(fetch=FetchType.LAZY, // Lazy is preferred else we might face exceptions bcos one entoty may be loaded before teh other or might not be available
+	@OneToOne(fetch=FetchType.LAZY, // Lazy is preferred else we might face exceptions bcos one entity may be loaded before teh other or might not be available
 			  cascade = CascadeType.ALL,
-			  mappedBy = "bookEntity") // note : here we do not mention join column name as relatiomship will be maintained by BookStatusEntity table. Refer commnets below.
+			  mappedBy = "bookEntity") // note : here we do not mention join column name as relationship will be maintained by BookStatusEntity table. Refer commnets below.
 	// book status entity has one-to-one relationship with book entity
-	// mappedBy tells Hibernate that bookEntity is not responsible for the relationship, but rather the responsibility is with book status entity.
+	// mappedBy tells Hibernate that bookEntity is not responsible for the one-to-one relationship, but rather the responsibility is with book status entity.
 	// So Hibernate should look for a field named bookEntity  in the BookStatusEntity to find the configuration for fk/joint column
 	private BookStatusEntity bookStatus; 
 	
