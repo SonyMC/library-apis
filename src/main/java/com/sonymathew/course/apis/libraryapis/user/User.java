@@ -5,6 +5,8 @@ import javax.validation.constraints.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,6 +15,7 @@ import com.sonymathew.course.apis.libraryapis.model.common.Gender;
 import java.time.LocalDate;
 import java.util.Collection;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)   // This annotation will remove hide any from the response 
 public class User implements UserDetails{
 
 

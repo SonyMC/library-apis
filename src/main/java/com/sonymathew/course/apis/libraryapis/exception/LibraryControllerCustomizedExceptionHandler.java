@@ -107,10 +107,59 @@ public class LibraryControllerCustomizedExceptionHandler extends ResponseEntityE
 		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.FORBIDDEN);
     }
 
-	@ExceptionHandler(Exception.class)
+	@ExceptionHandler(BookAlreadyExistsException.class)
+	public final ResponseEntity<LibraryApiError> bookAlreadyExists(BookAlreadyExistsException ex, WebRequest request) {
+		
+		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
+		logger.error(ex.getTraceId(), ex);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.CONFLICT);
+		
+	}	
+	
+	@ExceptionHandler(BookNotFoundException.class)
+	public final ResponseEntity<LibraryApiError> bookNotFound(BookNotFoundException ex, WebRequest request) throws Exception {
+		
+		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
+		logger.error(ex.getTraceId(), ex);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.NOT_FOUND);
+	
+		
+	}	
+	
+	@ExceptionHandler(BookNotUpdatedException.class)
+	public final ResponseEntity<LibraryApiError> bookNotUpdated(BookNotUpdatedException ex, WebRequest request) throws Exception {
+		
+		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
+		logger.error(ex.getTraceId(), ex);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.NOT_MODIFIED);
+	
+		
+	}
+	
+	@ExceptionHandler(BookNotDeletedException.class)
+	public final ResponseEntity<LibraryApiError> bookNotDeleted(BookNotDeletedException ex, WebRequest request) throws Exception {
+		
+		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
+		logger.error(ex.getTraceId(), ex);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.INTERNAL_SERVER_ERROR);
+	
+		
+	}	
+	
+	@ExceptionHandler(BookBadRequestException.class)
+	public final ResponseEntity<LibraryApiError> bookBadRequest(BookBadRequestException ex, WebRequest request) throws Exception {
+		
+		LibraryApiError exceptionResponse = new LibraryApiError(ex.getTraceId(),new Date(), ex.getMessage() , request.getDescription(true));
+		logger.error(ex.getTraceId(), ex);
+		return new ResponseEntity<LibraryApiError>(exceptionResponse,HttpStatus.BAD_REQUEST);
+	
+		
+	}		
+    
+    @ExceptionHandler(Exception.class)
 	public final ResponseEntity<LibraryApiError> handleAllExceptions(Exception ex, WebRequest request) {
 		
-		// Thsi is the generic excpetion handler mehod which is nto tied to any particular class. Hence we would need to generate a Trace ID.
+		// Thsi is the generic excpetion handler mehod which is not tied to any particular class. Hence we would need to generate a Trace ID.
 		String traceId = getTraceId(request);
 		LibraryApiError exceptionResponse =new LibraryApiError(traceId,new Date(), ex.getMessage(), request.getDescription(true));
 		logger.error(traceId, ex);

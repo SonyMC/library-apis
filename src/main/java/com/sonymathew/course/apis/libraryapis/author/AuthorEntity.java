@@ -3,9 +3,12 @@ package com.sonymathew.course.apis.libraryapis.author;
 
 import javax.persistence.*;
 
+import com.sonymathew.course.apis.libraryapis.book.BookEntity;
 import com.sonymathew.course.apis.libraryapis.model.common.Gender;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "AUTHOR")
@@ -29,7 +32,14 @@ public class AuthorEntity {
     @Column(name = "Gender")
     @Enumerated(EnumType.STRING)
     private Gender gender;
-
+    
+    
+    // defining many-to-many relationship couterpart of BookEntity ( there we defined a HashSet for AuthorEntity
+    @ManyToMany(fetch=FetchType.LAZY,
+    		    cascade = CascadeType.ALL,
+    		    mappedBy = "authors")
+    private Set<BookEntity> books = new HashSet<>();
+    
     public AuthorEntity() {
     }
 
@@ -40,6 +50,11 @@ public class AuthorEntity {
         this.gender = gender;
     }
 
+    public AuthorEntity(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }  
+    
     public int getAuthorId() {
         return authorId;
     }
