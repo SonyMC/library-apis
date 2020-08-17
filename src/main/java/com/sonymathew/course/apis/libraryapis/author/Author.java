@@ -2,10 +2,12 @@ package com.sonymathew.course.apis.libraryapis.author;
 
 import javax.validation.constraints.*;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sonymathew.course.apis.libraryapis.model.common.Gender;
 
 import java.time.LocalDate;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)   // This annotation will remove hide any from the response 
 public class Author {
 
     private Integer authorId;
@@ -36,6 +38,12 @@ public class Author {
         this.gender = gender;
     }
 
+    public Author(Integer authorId, String firstName, String lastName) {
+        this.authorId = authorId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }    
+    
     public Integer getAuthorId() {
         return authorId;
     }
