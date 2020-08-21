@@ -41,6 +41,7 @@ public class LibraryApiSecurityConfig extends WebSecurityConfigurerAdapter{
 				//		.antMatchers(HttpMethod.GET,SecurityConstants.GET_PUBLISHER_BY_NAME).permitAll()//  allow get publishers by Name request 
 				//		.antMatchers(HttpMethod.GET,SecurityConstants.SEARCH_PUBLISHER_BY_NAME).permitAll()//  allow get publishers by Name Query search request 
 						.antMatchers(HttpMethod.POST,SecurityConstants.NEW_USER_REGISTRATION_URL).permitAll()// allow new user creation as we do not want to challenge the first time user with a Jwt validation 
+						.antMatchers(HttpMethod.POST,SecurityConstants.TEST_NEW_USER_REGISTRATION_URL).permitAll()// allow  test new user creation. For some reason for integraton testing, teh above uri is not working!!!
 						.anyRequest().authenticated()   // apart from new user request all other requests will be authenticated
 						.and()  // add our customized authentication & authorization fiters 
 						.addFilter(new JwtAuthenticationFilter(authenticationManager())) // Authentication filter class

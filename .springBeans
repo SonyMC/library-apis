@@ -7,7 +7,6 @@
 	</configSuffixes>
 	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
-		<config>java:com.sonymathew.course.apis.libraryapis.LibraryApplication</config>
 	</configs>
 	<autoconfigs>
 	</autoconfigs>

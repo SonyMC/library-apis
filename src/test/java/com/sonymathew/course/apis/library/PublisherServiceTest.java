@@ -31,8 +31,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import com.sonymathew.course.apis.library.utils.LibraryApiTestUtil;
-import com.sonymathew.course.apis.library.utils.TestConstants;
+import com.sonymathew.course.apis.library.utils.old.LibraryApiTestUtil;
+import com.sonymathew.course.apis.library.utils.old.TestConstants;
 import com.sonymathew.course.apis.libraryapis.exception.PublisherAlreadyExistsException;
 import com.sonymathew.course.apis.libraryapis.exception.PublisherNotDeletedException;
 import com.sonymathew.course.apis.libraryapis.exception.PublisherNotFoundException;
