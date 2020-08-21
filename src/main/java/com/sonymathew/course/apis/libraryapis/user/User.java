@@ -58,19 +58,6 @@ public class User implements UserDetails{
     public User() {
     }
 
-    public User(int userId, String username, String password, String firstName, String lastName, LocalDate dateOfBirth, Gender gender,
-                String phoneNumber, String emailId, Role role) {
-        this.userId = userId;
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
-        this.phoneNumber = phoneNumber;
-        this.emailId = emailId;
-        this.role = role;
-    }
 
     public User(int userId, String username, String firstName, String lastName, LocalDate dateOfBirth, Gender gender,
                 String phoneNumber, String emailId, Role role) {
@@ -95,7 +82,47 @@ public class User implements UserDetails{
         this.phoneNumber = phoneNumber;
         this.emailId = emailId;
     }
+    
+    public User(String username, String firstName, String lastName, LocalDate dateOfBirth, Gender gender,
+            String phoneNumber, String emailId, Role role) {
+    	this.username = username;
+    	this.firstName = firstName;
+    	this.lastName = lastName;
+    	this.dateOfBirth = dateOfBirth;
+    	this.gender = gender;
+    	this.phoneNumber = phoneNumber;
+    	this.emailId = emailId;
+    	this.role = role;
+}
 
+  
+    public User(int userId, String username, String password, String firstName, String lastName, LocalDate dateOfBirth, Gender gender,
+            String phoneNumber, String emailId, Role role) {
+    	this.userId = userId;
+    	this.username = username;
+    	this.password = password;
+    	this.firstName = firstName;
+    	this.lastName = lastName;
+    	this.dateOfBirth = dateOfBirth;
+    	this.gender = gender;
+    	this.phoneNumber = phoneNumber;
+    	this.emailId = emailId;
+    	this.role = role;
+} 
+
+    public User(String username, String password, String firstName, String lastName, LocalDate dateOfBirth, Gender gender,
+            String phoneNumber, String emailId, Role role) {
+      	this.username = username;
+    	this.password = password;
+    	this.firstName = firstName;
+    	this.lastName = lastName;
+    	this.dateOfBirth = dateOfBirth;
+    	this.gender = gender;
+    	this.phoneNumber = phoneNumber;
+    	this.emailId = emailId;
+    	this.role = role;
+} 
+    
     public User(String username, String firstName, String lastName) {
         this.username = username;
         this.firstName = firstName;

@@ -3,12 +3,18 @@ package com.sonymathew.course.apis.libraryapis.testutils;
 import com.sonymathew.course.apis.libraryapis.model.common.Gender;
 
 public class TestConstants {
+    // Base URL
+    public static final String API_BASE_URL = "http://localhost:";
 
     public static final String API_TRACE_ID = "Test-Trace-Id";
+	
+	public static int apiCtr;
+	
+    
 
     // Test Publisher Details
     public static final String TEST_PUBLISHER_NAME = "TestPublisherName";
-    public static final String TEST_PUBLISHER_EMAIL = "TestPublisherName@email.com";
+    public static final String TEST_PUBLISHER_EMAIL = "TestPublisherName" + apiCtr + "@email.com";
     public static final String TEST_PUBLISHER_PHONE = "112-233-455";
 
     public static final String TEST_PUBLISHER_EMAIL_UPDATED = "TestPublisherNew@email.com";
@@ -23,8 +29,15 @@ public class TestConstants {
     public static final String TEST_USER_LAST_NAME = "TestUserLn";
     public static final String TEST_USER_USERNAME = "test.username";
     public static final String TEST_USER_PASSWORD = "test.password";
-    public static final String TEST_USER_EMAIL = TEST_USER_USERNAME + "@email.con";
+    public static final String TEST_USER_EMAIL = TEST_USER_USERNAME + + apiCtr + "@email.con";
     public static final String TEST_USER_PHONE = "223-344-566";
     public static final String TEST_USER_PHONE_UPDATED = "111-344-908";
     public static final Gender TEST_USER_GENDER = Gender.Female;
+    
+    
+ // User API URIs 
+ 	public static final String USER_API_REGISTER_URL = "/v1/users";  // POST Url used to create a user 
+	public static final String LOGIN_URL = "/login";  // POST Url for login
+	public static final String USER_API_BASE_URL = "/v1/users";   // base url 
+	public static final String USER_API_SEARCH_URI = USER_API_BASE_URL + "/search"; // search url
 }
