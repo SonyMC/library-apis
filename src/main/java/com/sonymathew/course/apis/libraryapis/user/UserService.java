@@ -186,7 +186,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
     
-    @Transactional
+    @Transactional   	
     public IssueBookResponse issueBooks(int userId, Set<Integer> bookIds, String traceId) throws LibraryResourceNotFoundException {
 
         Optional<UserEntity> userEntity = userRepository.findById(userId);
