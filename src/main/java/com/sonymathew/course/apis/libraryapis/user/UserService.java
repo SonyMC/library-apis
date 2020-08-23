@@ -2,6 +2,7 @@ package com.sonymathew.course.apis.libraryapis.user;
 
 import com.sonymathew.course.apis.libraryapis.book.BookEntity;
 import com.sonymathew.course.apis.libraryapis.book.BookRepository;
+import com.sonymathew.course.apis.libraryapis.book.BookService;
 import com.sonymathew.course.apis.libraryapis.book.BookStatusEntity;
 import com.sonymathew.course.apis.libraryapis.book.BookStatusRepository;
 import com.sonymathew.course.apis.libraryapis.exception.*;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+
 @Service
 public class UserService {
 
@@ -37,10 +39,12 @@ public class UserService {
 
     private BookRepository bookRepository;
     private BookStatusRepository bookStatusRepository;
-    private UserBookEntityRepository userBookEntityRepository;   
-    
+    private BookService bookService;
+    private UserBookEntityRepository userBookEntityRepository;
+
     @Value("${library.rule.user.book.max.times.issue: 3}")
-    private int maxNumberOfTimesIssue;   
+    private int maxNumberOfTimesIssue;
+ 
   
     public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
 		super();
@@ -182,10 +186,6 @@ public class UserService {
                 .collect(Collectors.toList());
     }
     
-
-
-    
-
     @Transactional
     public IssueBookResponse issueBooks(int userId, Set<Integer> bookIds, String traceId) throws LibraryResourceNotFoundException {
 
@@ -244,6 +244,33 @@ public class UserService {
         } else {
             throw new LibraryResourceNotFoundException(traceId, "Library User Id: " + userId + " Not Found");
         }
+    }
+
+    @Transactional
+    public void returnBooks(int userId, Integer bookId, String traceId) throws LibraryResourceNotFoundException {
+
+        Optional<UserEntity> userEntity = userRepository.findById(userId);
+
+        if(userEntity.isPresent()) {
+            List<UserBookEntity> byUserIdAndBookId = userBookEntityRepository.findByUserIdAndBookId(userId, bookId);
+            if(byUserIdAndBookId != null && byUserIdAndBookId.size() > 0) {
+                // Return the book
+                userBookEntityRepository.delete(byUserIdAndBookId.get(0));
+
+                // Manage the number of issued copies
+                Optional<BookEntity> be = bookRepository.findById(bookId);
+                BookStatusEntity bs = be.get().getBookStatus();
+                bs.setNumberOfCopiesIssued(bs.getNumberOfCopiesIssued() - 1);
+                bookStatusRepository.save(bs);
+            } else {
+                throw new LibraryResourceNotFoundException(traceId, "Book Id: " + bookId + " has not been issued to User Id: "+ userId + ". So can't be returned.");
+            }
+
+        } else {
+            throw new LibraryResourceNotFoundException(traceId, "Library User Id: " + userId + " Not Found");
+        }
     }  
+    
+
 	
 }
