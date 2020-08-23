@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sonymathew.course.apis</groupId>
-	<artifactId>library-api-v2</artifactId>
+	<artifactId>library-apis</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>library-api-v2</name>
+	<name>library-apis</name>
 	<description>Library API </description>
 
 	<properties>
