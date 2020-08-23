@@ -1,7 +1,7 @@
 package com.sonymathew.course.apis.libraryapis.user;
 
 public class IssueBookStatus {
-
+	
     private Integer bookId;
     private String status;
     private String remarks;

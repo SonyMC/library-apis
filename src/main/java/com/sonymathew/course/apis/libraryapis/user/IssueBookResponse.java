@@ -3,7 +3,7 @@ package com.sonymathew.course.apis.libraryapis.user;
 import java.util.Set;
 
 public class IssueBookResponse {
-	
+
     private Set<IssueBookStatus> issueBookStatuses;
 
     public IssueBookResponse() {
@@ -19,7 +19,6 @@ public class IssueBookResponse {
 
     public void setIssueBookStatuses(Set<IssueBookStatus> issueBookStatuses) {
         this.issueBookStatuses = issueBookStatuses;
-    }
-	
+    }	
 
 }

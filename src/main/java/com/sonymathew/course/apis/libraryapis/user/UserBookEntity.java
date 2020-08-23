@@ -93,5 +93,6 @@ public class UserBookEntity {
     public void setNumberOfTimesIssued(int numberOfTimesIssued) {
         this.numberOfTimesIssued = numberOfTimesIssued;
     }	
+	
 
 }
