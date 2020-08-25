@@ -12,4 +12,6 @@ public class SecurityConstants {
 	public static final String GET_PUBLISHER_BY_NAME = "/v1/publishers/name/*";  // This url gets publishers by name 
 	public static final String SEARCH_PUBLISHER_BY_NAME = "/v1/publishers/search?*";  // This url gets publishers by name 
 	public static final String NEW_USER_DEFAULT_PASSWORD = "Password123";
+    // Base URL
+    public static final String API_BASE_URL = "http://localhost:";	
 }

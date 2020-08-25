@@ -66,6 +66,35 @@
 			"response": []
 		},
 		{
+			"name": "LoginUser Ngrok",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"sunny\",\r\n    \"password\": \"sunnypwd\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://37cfa9784b4d.ngrok.io/login",
+					"protocol": "http",
+					"host": [
+						"37cfa9784b4d",
+						"ngrok",
+						"io"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "LoginUserAdmin",
 			"request": {
 				"method": "POST",
@@ -96,12 +125,51 @@
 			"response": []
 		},
 		{
+			"name": "LoginUserAdmin Ngrok",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"lib-admin\",\r\n    \"password\": \"admin-password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://37cfa9784b4d.ngrok.io/login",
+					"protocol": "http",
+					"host": [
+						"37cfa9784b4d",
+						"ngrok",
+						"io"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "GetUserByID",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8083/v1/users/4216",
+					"raw": "http://localhost:8083/v1/users/4228",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -110,7 +178,7 @@
 					"path": [
 						"v1",
 						"users",
-						"4216"
+						"4228"
 					]
 				}
 			},
@@ -150,11 +218,21 @@
 		{
 			"name": "UpdateUserByIDandObject",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userId\": 4216,\r\n    \"username\": \"kalsa\",\r\n    \"password\": null,\r\n    \"firstName\": \"sarsu\",\r\n    \"lastName\": \"kalluvathikal\",\r\n    \"dateOfBirth\": \"1999-01-20\",\r\n    \"gender\": \"Female\",\r\n    \"phoneNumber\": \"651-456-781\",\r\n    \"emailId\": \"kvs@email.com\",\r\n    \"role\": \"USER\"\r\n}",
+					"raw": "{\r\n    \"userId\": 4299,\r\n    \"username\": \"sunnybhai\",\r\n    \"password\": \"sunnypwd\",\r\n    \"firstName\": \"sunny\",\r\n    \"lastName\": \"cherian\",\r\n    \"dateOfBirth\": \"1999-01-20\",\r\n    \"gender\": \"Male\",\r\n    \"phoneNumber\": \"113-456-781\",\r\n    \"emailId\": \"sunny@email.com\",\r\n    \"role\": \"USER\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -162,7 +240,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/v1/users/4216",
+					"raw": "http://localhost:8083/v1/users/4229",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -171,7 +249,7 @@
 					"path": [
 						"v1",
 						"users",
-						"4216"
+						"4229"
 					]
 				}
 			},

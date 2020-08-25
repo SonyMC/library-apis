@@ -2,7 +2,6 @@ package com.sonymathew.course.apis.libraryapis.user;
 
 import com.sonymathew.course.apis.libraryapis.book.BookEntity;
 import com.sonymathew.course.apis.libraryapis.book.BookRepository;
-import com.sonymathew.course.apis.libraryapis.book.BookService;
 import com.sonymathew.course.apis.libraryapis.book.BookStatusEntity;
 import com.sonymathew.course.apis.libraryapis.book.BookStatusRepository;
 import com.sonymathew.course.apis.libraryapis.exception.*;
@@ -39,11 +38,11 @@ public class UserService {
 
     private BookRepository bookRepository;
     private BookStatusRepository bookStatusRepository;
-    private BookService bookService;
     private UserBookEntityRepository userBookEntityRepository;
 
     @Value("${library.rule.user.book.max.times.issue: 3}")
     private int maxNumberOfTimesIssue;
+
  
   
     public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
