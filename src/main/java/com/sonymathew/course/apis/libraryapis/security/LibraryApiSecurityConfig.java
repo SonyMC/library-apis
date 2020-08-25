@@ -1,8 +1,14 @@
 
 package com.sonymathew.course.apis.libraryapis.security;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +16,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.sonymathew.course.apis.libraryapis.testutils.TestConstants;
 
 
 // This class is used to configure our Authentication(JwtAuthenticationFilter.java) and Authorization(JwtAuthorizationFilter.java) classes to teh Spring Security Filter Chain 
@@ -22,6 +33,10 @@ public class LibraryApiSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	private UserDetailsServiceImpl userDetailsServiceImpl; // We will need to annotate the UserDetailsServiceImpl class with @Service so that it can be autowired here
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+    
+    @Autowired
+    Environment environment;
 	
 	// Construtor based dependency injection
 	public LibraryApiSecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl,
@@ -62,6 +77,61 @@ public class LibraryApiSecurityConfig extends WebSecurityConfigurerAdapter{
 		auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(bCryptPasswordEncoder); // let the authentication manager know what is the user details service implmentation used to get teh user details and also teh type of pwd encoder used. 
 
 		}
+	
+	
+	/*
+	 * This method is added only to demonstrte how to configure CORS in a browser based scenario. In our Library API - THIS CAN BE WHOLLY IGNORED OR LEFT OUT!!!!
+	 */
+	
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		
+        //The port on which the server started.
+        String port = environment.getProperty("local.server.port");
+        
+        String allowedUriGeneric = TestConstants.API_BASE_URL + port + "/v1/*" ;
+        String allowedUriLogin = TestConstants.API_BASE_URL + port + "/login" ;
+		
+        // Define an immutable list as we dont want this to keep changing 
+        final List<String> allowedUris = new ArrayList<>(java.util.Arrays.asList(allowedUriGeneric,allowedUriLogin));
+		
+        //Define an immutable list of methods
+        final List<String> allowedMethods = new ArrayList<>(java.util.Arrays.asList("HEAD",
+                "GET", "POST", "PUT", "DELETE", "PATCH"));
+        
+       //Define an immutable list of headers
+        final List<String> allowedHeaders = new ArrayList<>(java.util.Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        
+        // Configure CORS  
+		final CorsConfiguration corsConfiguration = new CorsConfiguration();
+		
+		//set allowed uris 
+		corsConfiguration.setAllowedOrigins(allowedUris);
+		
+		
+		//set allowed methods
+		corsConfiguration.setAllowedHeaders(allowedMethods);
+		
+		// setAllowCredentials(true) is important, otherwise:
+        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
+        corsConfiguration.setAllowCredentials(true);		
+        
+        
+        // setAllowedHeaders is important! Without it, OPTIONS preflight request
+        // will fail with 403 Invalid CORS request
+        corsConfiguration.setAllowedHeaders(allowedHeaders);
+        
+        // define a uri based CORS configuration source 
+        final UrlBasedCorsConfigurationSource urlCorsSource = new UrlBasedCorsConfigurationSource();
+        
+        // register the uri based CORS configuration source using the corsConfiguration details
+         urlCorsSource.registerCorsConfiguration("/**", corsConfiguration);
+         
+        return urlCorsSource;
+        
+		
+	}
+	
 	
 
 
