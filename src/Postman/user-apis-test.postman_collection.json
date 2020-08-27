@@ -154,6 +154,79 @@
 			"response": []
 		},
 		{
+			"name": "LoginUserAdmin ApiGee Key As Query",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"lib-admin\",\r\n    \"password\": \"admin-password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://mailsonymathew-eval-test.apigee.net/library-api/login?apikey=GxfAUKSfYeMuLpJY7Z7CDA7l8mgkaK49",
+					"protocol": "http",
+					"host": [
+						"mailsonymathew-eval-test",
+						"apigee",
+						"net"
+					],
+					"path": [
+						"library-api",
+						"login"
+					],
+					"query": [
+						{
+							"key": "apikey",
+							"value": "GxfAUKSfYeMuLpJY7Z7CDA7l8mgkaK49"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LoginUserAdmin ApiGee Key As Header",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-apikey",
+						"value": "GxfAUKSfYeMuLpJY7Z7CDA7l8mgkaK49",
+						"description": "Key value for user from ApiGee",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"lib-admin\",\r\n    \"password\": \"admin-password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://mailsonymathew-eval-test.apigee.net/library-api/login",
+					"protocol": "http",
+					"host": [
+						"mailsonymathew-eval-test",
+						"apigee",
+						"net"
+					],
+					"path": [
+						"library-api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "GetUserByID",
 			"request": {
 				"auth": {
@@ -176,6 +249,45 @@
 					],
 					"port": "8083",
 					"path": [
+						"v1",
+						"users",
+						"4228"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserByID ApiGee As Header",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-apikey",
+						"value": "GxfAUKSfYeMuLpJY7Z7CDA7l8mgkaK49",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://mailsonymathew-eval-test.apigee.net/library-api/v1/users/4228",
+					"protocol": "http",
+					"host": [
+						"mailsonymathew-eval-test",
+						"apigee",
+						"net"
+					],
+					"path": [
+						"library-api",
 						"v1",
 						"users",
 						"4228"
